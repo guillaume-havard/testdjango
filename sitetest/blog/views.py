@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, Http404
 
 # Create your views here.
 
@@ -15,3 +15,18 @@ def home(request):
     text = """<h1>Bienvenue !</h1>
               <p>test test test test test éàêâëä çç!</p>"""
     return HttpResponse(text)
+
+def error(request):
+    """
+    Page d'erreur
+    :param request:
+    :return:
+    """
+    raise Http404
+    return HttpResponse('pas error')
+
+def arti(request):
+    """Rediretion"""
+    #return redirect("https://www.djangoproject.com")
+    #return redirect('blog.views.home')
+    return redirect('acc_blog')
