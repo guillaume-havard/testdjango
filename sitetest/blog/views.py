@@ -1,13 +1,16 @@
 #-*- coding: utf-8 -*-
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404
+from datetime import datetime
+from blog.models import Article
 
 # Create your views here.
 
 """
-Toutes les fonctions prendront comme premier argument un objet du type HttpRequest. Toutes les vues doivent forcément retourner une instance de HttpResponse, sans quoi Django générera une erreur.
+Toutes les fonctions prendront comme premier argument un objet du type HttpRequest.
+#Toutes les vues doivent forcément retourner une instance de HttpResponse, sans quoi Django générera une erreur.
 """
-def home(request):
+def home_base(request):
     """ 
     Exemple de page HTML, non valide pour que l'exemple soit concis 
     Dans le futur ne jamais mettre du code HTML dans une vue.
@@ -15,6 +18,9 @@ def home(request):
     text = """<h1>Bienvenue !</h1>
               <p>test test test test test éàêâëä çç!</p>"""
     return HttpResponse(text)
+
+def home(request):
+    return render(request, 'blog/accueil.html')
 
 def error(request):
     """
@@ -30,3 +36,22 @@ def arti(request):
     #return redirect("https://www.djangoproject.com")
     #return redirect('blog.views.home')
     return redirect('acc_blog')
+
+def date_actuelle(request):
+    return render(request, 'blog/date.html', {'date': datetime.now()})
+
+def addition(request, nombre1, nombre2):
+    total = int(nombre1) + int(nombre2)
+
+    # Retourne nombre1, nombre2 et la somme des deux au tpl
+    return render(request, 'blog/addition.html', locals())
+
+def articles(request):
+    """ Afficher tous les articles de notre blog """
+    articles = Article.objects.all() # Nous sélectionnons tous nos articles
+    return render(request, 'blog/articles.html', {'derniers_articles': articles})
+
+def lire(request, id):
+    """ Afficher un article complet """
+    article = get_object_or_404(Article, id=id)
+    return render(request, 'blog/lire.html', {'article':article})
