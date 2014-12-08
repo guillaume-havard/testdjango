@@ -9,4 +9,5 @@ urlpatterns = patterns('blog.views',
     url(r'^addition/(?P<nombre1>\d+)/(?P<nombre2>\d+)/$', 'addition'),
     url(r'^articles$', 'articles'),
     url(r'^article/(?P<id>\d+)-(?P<slug>.+)', 'lire'),
+    url(r'^contact/$', 'contact'),
 )
