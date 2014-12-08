@@ -46,6 +46,9 @@ class ArticleAdmin(admin.ModelAdmin):
     # Pour que le champs spécial est une entête
     apercu_contenu.short_description = 'Aperçu du contenu'
 
+    # Faire en sorte que le champs soit automatiquement remplit
+    prepopulated_fields = {'slug': ('titre', ), }
+
 
 # Il pourront ensuite ^etre modifié dans linterface d'administration.
 admin.site.register(Categorie)
