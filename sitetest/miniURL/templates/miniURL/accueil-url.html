@@ -1,0 +1,16 @@
+<h1>Redirection des URLS</h1>
+
+{% for url in urls %}
+    <div class="url">
+        <p>
+            <big>{{ url.real_url }}</big>
+            {{ url.pseudo }} {{ url.date }} :
+            <a href="{% url "miniURL.views.redirection" url.small_url %}">{{ url.small_url }}</a>
+            nb of use : {{ url.number_access }}
+        </p>
+    </div>
+{% empty %}
+    <p>Aucune URL.</p>
+{% endfor %}
+<br/>
+<p><a href="{% url "miniURL.views.nouvelle_url" %}">Créer une redirection</a></p>
