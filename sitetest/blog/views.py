@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404
 from datetime import datetime
 from blog.models import Article
-from blog.forms import ContactForm
+from blog.forms import ContactForm, ArticleForm
 
 # Create your views here.
 
@@ -78,3 +78,15 @@ def contact(request):
         form = ContactForm()  # Nous créons un formulaire vide
 
     return render(request, 'blog/contact.html', locals())
+
+def nouvel_article(request):
+    """AJout d'un article via formulaire"""
+    if request.method == "POST":
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            envoi = True
+    else:
+        form = ArticleForm()
+
+    return render(request, "blog/nouvel-article.html", locals())

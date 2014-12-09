@@ -1,4 +1,6 @@
 from django import forms
+from blog.models import Article
+
 
 class ContactForm(forms.Form):
     sujet = forms.CharField(max_length=100)
@@ -36,3 +38,25 @@ class ContactForm(forms.Form):
                                forms.ValidationError("Vous parlez de pizzas dans le sujet ET le message ? Non mais ho !"))
 
         return cleaned_data  # N'oublions pas de renvoyer les données si tout est OK
+
+
+#Pour faire un formulaire depuis un modèle. (/!\ héritage différent)
+class ArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        #exclude = ('auteur','categorie','slug')  # Exclura les champs nommés « auteur », « categorie » et « slug »
+        fields = ('titre', 'auteur', 'categorie', 'contenu')
+
+# Pour récupérer des données cel apeut ce faire avec un POST
+# ou directement en donnant un objet du modele :
+#form = ArticleForm(instance=article)  # article est bien entendu un objet d'Article quelconque dans la base de données
+# Le champs est ainsi préremplit.
+
+# Quand on a recu une bonne formeModele il suffit de save() pour la mettre en base
+
+# /!\ S'il faut faire des verifications/modifications avant d'enregistrer il est possible de faire :
+#form = ArticleForm(donnees)  # Pas besoin de spécifier les autres champs, ils ont été exclus
+#article = form.save(commit=False)  # Ne sauvegarde pas directement l'article dans la base de données
+#article.categorie = Categorie.objects.all()[0]  # Nous ajoutons les attributs manquants
+#article.auteur = "Jean-Albert"
+#article.save()
