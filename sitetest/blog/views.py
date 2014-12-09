@@ -2,8 +2,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404
 from datetime import datetime
-from blog.models import Article
-from blog.forms import ContactForm, ArticleForm
+from blog.models import Article, Contact
+from blog.forms import ContactForm, ArticleForm, NouveauContactForm
 
 # Create your views here.
 
@@ -71,7 +71,8 @@ def contact(request):
             renvoi = form.cleaned_data['renvoi']
 
             # Nous pourrions ici envoyer l'e-mail grâce aux données que nous venons de récupérer
-
+            # Il faut traiter les infos.
+            # Voir nouveau_contact
             envoi = True
 
     else: # Si ce n'est pas du POST, c'est probablement une requête GET
@@ -90,3 +91,30 @@ def nouvel_article(request):
         form = ArticleForm()
 
     return render(request, "blog/nouvel-article.html", locals())
+    
+
+# Lors de la création de la forme request.FILES est ajouté.    
+def nouveau_contact(request):
+    sauvegarde = False
+
+    if request.method == "POST":
+        form = NouveauContactForm(request.POST, request.FILES)
+        if form.is_valid():
+            contact = Contact()
+            contact.nom = form.cleaned_data["nom"]
+            contact.adresse = form.cleaned_data["adresse"]
+            contact.photo = form.cleaned_data["photo"]
+            contact.save()
+
+            sauvegarde = True
+    else:
+        form = NouveauContactForm()
+
+    return render(request, 'blog/ncontact.html', locals())    
+    
+def voir_contacts(request):
+    contacts = Contact.objects.all()
+    return render(request, 'blog/voir_contacts.html', {'contacts': contacts})
+    
+    
+

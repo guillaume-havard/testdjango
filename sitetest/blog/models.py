@@ -134,3 +134,21 @@ class Offre(models.Model):
     def __str__(self):
         return "{0} vendu par {1}".format(self.produit, self.vendeur)
 
+class Contact(models.Model):
+    nom = models.CharField(max_length=255)
+    adresse = models.TextField()
+    photo = models.ImageField(upload_to="photos/")
+    
+    def __str__(self):
+           return self.nom
+
+    
+# Pour donner des noms spécifiques aux fichiers
+def renommage(instance, nom):
+    nom_fichier = os.path.splitext(nom)[0] # on retire l'extension
+    return "{}-{}".format(instance.id, nom_fichier)
+    
+# Documents (fichier) avec nom prenant en compte l'id en BdD.
+class Document(models.Model):
+    nom = models.CharField(max_length=100)
+    doc = models.FileField(upload_to=renommage, verbose_name="Document")

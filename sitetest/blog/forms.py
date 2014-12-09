@@ -60,3 +60,11 @@ class ArticleForm(forms.ModelForm):
 #article.categorie = Categorie.objects.all()[0]  # Nous ajoutons les attributs manquants
 #article.auteur = "Jean-Albert"
 #article.save()
+
+
+#Pour les images.
+class NouveauContactForm(forms.Form):
+    nom = forms.CharField()
+    adresse = forms.CharField(widget=forms.Textarea)
+    photo = forms.ImageField()
+    
