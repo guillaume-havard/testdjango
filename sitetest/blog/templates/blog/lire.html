@@ -1,3 +1,6 @@
 <h1>{{ article.titre }} <span class="small">dans {{ article.categorie.nom }}</span></h1>
-<p class="infos">Rédigé par {{ article.auteur }}, le {{ article.date|date:"DATE_FORMAT" }}</p>
+<p class="infos">
+    Rédigé par {{ article.auteur }}, le {{ article.date|date:"DATE_FORMAT" }}
+    article vu {{ article.nb_vues }} fois
+</p>
 <div class="contenu">{{ article.contenu|linebreaks }}</div>

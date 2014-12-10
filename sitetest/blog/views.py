@@ -1,8 +1,9 @@
 #-*- coding: utf-8 -*-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404
+from django.views.generic import TemplateView, ListView, DetailView
 from datetime import datetime
-from blog.models import Article, Contact
+from blog.models import Article, Categorie, Contact
 from blog.forms import ContactForm, ArticleForm, NouveauContactForm
 
 # Create your views here.
@@ -115,6 +116,41 @@ def nouveau_contact(request):
 def voir_contacts(request):
     contacts = Contact.objects.all()
     return render(request, 'blog/voir_contacts.html', {'contacts': contacts})
-    
-    
 
+## Voir blog.url
+# Pour un affichage sans aucun traitement
+class FAQView(TemplateView):
+   template_name = "blog/faq.html"  # chemin vers le template à afficher
+
+class ListeArticles(ListView):
+    model = Article
+    context_object_name = "derniers_articles"
+    template_name = "blog/articles.html"
+    paginate_by = 5
+    #queryset = Article.objects.filter(categorie__id=1) # requettes identiques aux view pour affichage
+    # Si argument donné dans l'url
+    def get_queryset(self):
+       return Article.objects.filter(categorie__id=self.kwargs['id']) # ou si arg non nomé : self.args[0]
+
+    # Pour ajouter des elements au contexte (template)
+    def get_context_data(self, **kwargs):
+        # Nous récupérons le contexte depuis la super-classe
+        context = super(ListeArticles, self).get_context_data(**kwargs)
+        # Nous ajoutons la liste des catégories, sans filtre particulier
+        context['categories'] = Categorie.objects.all()
+        return context
+    
+class LireArticle(DetailView):
+    context_object_name = "article"
+    model = Article
+    template_name = "blog/lire.html"
+
+    # Pour pouvoir faire des actions sur les modèles avant de les afficher.
+    def get_object(self):
+        # Nous récupérons l'objet, via la super-classe
+        article = super(LireArticle, self).get_object()
+
+        article.nb_vues += 1  # Imaginons un attribut « Nombre de vues »
+        article.save()
+
+        return article  # Et nous retournons l'objet à afficher
