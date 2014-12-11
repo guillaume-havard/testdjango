@@ -1,6 +1,9 @@
 {% if sauvegarde %}Votre URL a bien été sauvegardée !{% endif %}
 
-<form action="{% url "url_nouveau" %}" method="post">
+
+{# <form action="{% url "url_nouveau" %}" method="post"> #}
+{# Plus nécessaire avec les méthode générique de manipulation de modele. #}
+<form action="" method="post"> 
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit" />

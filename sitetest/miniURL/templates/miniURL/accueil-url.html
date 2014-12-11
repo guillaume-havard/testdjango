@@ -7,6 +7,8 @@
             {{ url.pseudo }} {{ url.date }} :
             <a href="{% url "miniURL.views.redirection" url.small_url %}">{{ url.small_url }}</a>
             nb of use : {{ url.number_access }}
+            <a href="{% url "url_update" url.small_url %}">Mettre à jour</a> - 
+            <a href="{% url "url_delete" url.small_url %}">Supprimer</a>
         </p>
     </div>
 {% empty %}
