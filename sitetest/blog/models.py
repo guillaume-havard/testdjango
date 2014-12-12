@@ -153,3 +153,30 @@ def renommage(instance, nom):
 class Document(models.Model):
     nom = models.CharField(max_length=100)
     doc = models.FileField(upload_to=renommage, verbose_name="Document")
+
+
+## ALLEZ plus lion avec les modèles
+class Eleve(models.Model):
+    nom = models.CharField(max_length=31)
+    moyenne = models.IntegerField(default=10)
+
+    def __str__(self):
+        return "Élève {0} ({1}/20 de moyenne)".format(self.nom, self.moyenne)
+
+## Q
+# from django.db.models import Q
+#Eleve.objects.filter(Q(nom="Maxime"))
+# Meme résulatat que :
+#Eleve.objects.filter(nom="Maxime")
+# Mais avec Q im est possible de faire :
+#Eleve.objects.filter(Q(moyenne__gt=16) | Q(moyenne__lt=8))
+# ou
+#Eleve.objects.filter(Q(moyenne=10) & Q(nom="Sofiane"))
+#Eleve.objects.filter(Q(moyenne=10), Q(nom="Sofiane")) ',' pareil que '&'
+# inversion avec '~'
+#Eleve.objects.filter(Q(moyenne=10), ~Q(nom="Sofiane"))
+# requette Q "Q(('moyenne',10))" pareil que "Q(moyenne=10)"
+#conditions = [('moyenne', 15), ('nom', 'Thibault'), ('moyenne', 18)]
+#objets_q = [Q(x) for x in conditions]
+#import operator
+#Eleve.objects.filter(reduce(operator.or_, objets_q))
