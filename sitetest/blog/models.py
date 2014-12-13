@@ -180,3 +180,130 @@ class Eleve(models.Model):
 #objets_q = [Q(x) for x in conditions]
 #import operator
 #Eleve.objects.filter(reduce(operator.or_, objets_q))
+
+## Les agrégations
+# Opération mathématiques sur des elements du modèle
+#from django.db.models import Avg
+#Eleve.objects.aggregate(Avg('moyenne'))
+# le resultat est un dictionnaire avec le nom donne suivi de l'opération comme clef
+#res : {'moyenne__avg': 11.25}
+# Les opération peuvent etre combinées
+#Eleve.objects.aggregate(Avg('moyenne'), Min('moyenne'), Max('moyenne'), Count('moyenne'))
+#{'moyenne__max': 18, 'moyenne__avg': 11.25, 'moyenne__min': 7, 'moyenne__cnt': 4}
+# Spécification des clefs
+#Eleve.objects.aggregate(Moyenne=Avg('moyenne'), Minimum=Min('moyenne'), Maximum=Max('moyenne'), Nombre=Count('moyenne'))
+#{'Minimum': 7, 'Moyenne': 11.25, 'Maximum': 18, 'Nombre': 4}
+
+## Annotation
+#Rajouter un champs dans l'objet
+#Cours.objects.annotate(Avg("eleves__moyenne"))[0].eleves__moyenne__avg # contient 11.25
+#Cours.objects.annotate(Moyenne=Avg("eleves__moyenne"))[1].Moyenne # pareil, 12.5
+#Cours.objects.annotate(Moyenne=Avg("eleves__moyenne")).filter(Moyenne__gte=12) # -> [<Cours: Anglais>]
+
+## héritage des modèles
+# 3 méthode d'héritage avec Django
+#-- Les modèles parents abstraits
+# 1 modèle de badse abstrait (pas de modèle en base de données) pourra servir de base pour d'autres modèles
+# classe abstratire : surcharge Meta avec "abstract = True"
+# class Document(models.Model):
+#     titre = models.CharField(max_length=255)
+#     date_ajout = models.DateTimeField(auto_now_add=True,
+#                                       verbose_name="Date d'ajout du document")
+#     auteur = models.CharField(max_length=255, null=True, blank=True)
+#
+#     class Meta:
+#         abstract = True
+#
+# class Article(Document):
+#     contenu = models.TextField()
+#
+# class Image(Document):
+#     image = models.ImageField(upload_to="images"
+
+# Aucune manipulation est possible avec le modèle abstrait
+
+
+#-- Les modèles parents classiques
+# class Lieu(models.Model):
+#     nom = models.CharField(max_length=50)
+#     adresse = models.CharField(max_length=100)
+#
+#     def __str__(self):
+#         return self.nom
+#
+# class Restaurant(Lieu):
+#     menu = models.TextField()
+
+# Lieu peut exister seul ainsi que Restaurant
+#Cependant lorsqu'un restaurant est créer la partie correspondant au lieu sera ajouté dans la table Lieu
+# dans Restaurant il y aur le menu ansi qu'une FK pour l'a bonne entrée dans Lieu.
+
+# il est possible d'acdeser à un classe fille depuis la classe d'origine, il suffit de donner le nom de cette classe
+#print type(lieu.restaurant) # -> <class 'blog.models.Restaurant'>
+
+#-- Les modèles proxy
+# Le modèle fille ne sera pas en basse de donnée
+# il permet d'avoir un acces et des manipulation de données différente que sa classe mère mais avec les meme données
+# class RestoProxy(Restaurant):
+#     class Meta:
+#         proxy = True  # Nous spécifions qu'il s'agit d'un proxy
+#         ordering = ["nom"]  # Nous changeons le tri par défaut
+#
+#     def crepes(self):
+#         if "crêpe" in self.menu:  # Il y a des crêpes dans le menu
+#             return True
+#         return False
+
+# Que ce soit par Restaurant ou Resto proxy nous aurons les m^eme données.
+# Mais avec RestoProxi il est possible de savoir s'il y a des cr^epes au menu.
+
+## ContentTypes
+# permet le lien d'une entrée de modèle à un autre modèle ...
+# Attention i doit ^etre dans les INSTALLED_APPS 'django.contrib.contenttypes'
+
+#from blog.models import Eleve
+#from django.contrib.contenttypes.models import ContentType
+#ct = ContentType.objects.get(app_label="blog", model="eleve")  # ct -> <ContentType: eleve>
+
+#ContentType a deux méthodes qui lui sont propre
+# model class renvoie la classe du modèle représenté
+# get_object_for_this_type raccourci pour model_class().objects.get(attr=arg)
+
+#ct.model_class() # -> <class 'blog.models.Eleve'>
+#ct.get_object_for_this_type(nom="Maxime") # -> <Eleve: Élève Maxime (7/20 de moyenne)>
+
+# en faisant :
+# from django.contrib.contenttypes.models import ContentType
+# from django.contrib.contenttypes.fieds import GenericForeignKey
+#
+# class Commentaire(models.Model):
+#     auteur = models.CharField(max_length=255)
+#     contenu = models.TextField()
+#     content_type = models.ForeignKey(ContentType)
+#     object_id = models.PositiveIntegerField()
+#     content_object = GenericForeignKey('content_type', 'object_id')
+#
+#     def __str__(self):
+#         return "Commentaire de {0} sur {1}".format(self.auteur, self.content_object)
+
+# la "vrai" clef etrangère est sonstitué d'une d'une clef et d'une reférene vers un modèle pour le moment inconu
+# qui devra ^etre renseigner à la création de l'entrée Commentaire.
+
+# from blog.models import Commentaire, Eleve
+# e = Eleve.objects.get(nom="Sofiane")
+# c = Commentaire.objects.create(auteur="Le professeur",contenu="Sofiane ne travaille pas assez.", content_object=e)
+# c.content_object -> <Eleve: Élève Sofiane (10/20 de moyenne)>
+# c.object_id -> 4
+# c.content_type.model_class() -> <class 'blog.models.Eleve'>
+
+# /!\ dans ce cas plus de relation inverse possible nativement
+
+# Il faudra rajouter un champs dans le modèle reféré
+# ici Elève :
+    commentaires = GenericRelation('Commentaire')
+# attention si vous avez changer les noms "content_type" et "object_id" pour la clef etrangère
+# vous devez spécifier ces noms :
+
+# commentaires = GenericRelation(Commentaire,
+#     content_type_field="le_champ_du_content_type",
+#     object_id_field="le champ_de_l_id")
