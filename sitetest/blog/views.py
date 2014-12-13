@@ -154,3 +154,6 @@ class LireArticle(DetailView):
         article.save()
 
         return article  # Et nous retournons l'objet à afficher
+
+def test_random(request):
+    return render(request, 'blog/test_random.html', {'begin': 1, 'end': 42})

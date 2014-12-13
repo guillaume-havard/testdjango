@@ -5,7 +5,7 @@
     si elles ne concernent qu'une app, ont les laisse dans l'app
     Si elle peuvent concrnée plusieurs application il est  possible de créer une app qu'avec des templates spéciaux
 
-    L'application doit contenir un dossier 'templatetags' (ave un ficchier '__init__.py)
+    L'application doit contenir un dossier 'templatetags' (ave un fichier '__init__.py)
 
     Voir blog/templatetags/blog_extra.py pour la suite
 
@@ -16,7 +16,7 @@
 
 </p>
 
-
+<h4>Les filtres</h4>
 Un jour, une certaine personne m'a dit : {{ "Bonjour le monde !"|citation }}
 
 <p>
@@ -27,6 +27,21 @@ Un jour, une certaine personne m'a dit : {{ "Bonjour le monde !"|citation }}
     {{ "To be or not to be, that's the question"|smart_truncate }}<br />
 </p>
 
-Pour les contexte speciaux voir sitetest/context_processors.py
+
+<h4>Le contexte</h4>
+
+Pour les contextes speciaux voir sitetest/context_processors.py
 
 <p>Nous sommes le {{ date_actuelle }}</p>
+
+
+<h4>Les tags</h4>
+<p>
+    Composé d'une fonction de compilation (comment on l'écrit) et d'une fonction de rendu (qu'est ce qu'il donne) <br/>
+
+    Exemple avec une tag pour fonction random : {% random 33 35 %} <br/>
+
+    Les tags simple, qui ne dépendent que des paramètre en entrée peuvent être érit plus simplement exemple random<br/>
+
+</p>
+

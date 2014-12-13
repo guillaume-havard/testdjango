@@ -1,0 +1,17 @@
+{% load blog_extras %}
+
+<h2>test random</h2>
+
+<p>
+    test : {% random_var begin end %}
+
+    test : {% random_var 0 42 %}
+    test : {% random_var begin end %}
+    test : {% random_var begin 42 %} <br/>
+
+    test : {% random_sp begin end %}
+
+    test : {% random_sp 0 42 %}
+    test : {% random_sp begin end %}
+    test : {% random_sp begin 42 %}
+</p>
