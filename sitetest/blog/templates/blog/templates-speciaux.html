@@ -1,0 +1,32 @@
+{% load blog_extras %}
+<p>
+    Pour avoir des templates spéciaux avec tag et filtres définit par nos soin il faut que les
+    fichiers de template soient dans une application.
+    si elles ne concernent qu'une app, ont les laisse dans l'app
+    Si elle peuvent concrnée plusieurs application il est  possible de créer une app qu'avec des templates spéciaux
+
+    L'application doit contenir un dossier 'templatetags' (ave un ficchier '__init__.py)
+
+    Voir blog/templatetags/blog_extra.py pour la suite
+
+    Pour ajouter ce que l'on a implémenter il suffit de mettre l'instruction {% load blog_extras %} au début du tempalte
+    (si les modifs on été apporté depuis blog_exrta.py)
+
+    pour plusieur {% load blog_extras static i18n %}
+
+</p>
+
+
+Un jour, une certaine personne m'a dit : {{ "Bonjour le monde !"|citation }}
+
+<p>
+   {{ "Bonjour"|smart_truncate:14 }}<br />
+   {{ "Bonjour tout le monde"|smart_truncate:15 }}<br />
+   {{ "Bonjour tout le monde, c'est bientôt Noël"|smart_truncate:18 }}<br />
+   {{ "To be or not to be, that's the question"|smart_truncate:16 }}<br />
+    {{ "To be or not to be, that's the question"|smart_truncate }}<br />
+</p>
+
+Pour les contexte speciaux voir sitetest/context_processors.py
+
+<p>Nous sommes le {{ date_actuelle }}</p>

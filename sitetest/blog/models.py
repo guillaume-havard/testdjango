@@ -300,7 +300,7 @@ class Eleve(models.Model):
 
 # Il faudra rajouter un champs dans le modèle reféré
 # ici Elève :
-    commentaires = GenericRelation('Commentaire')
+#    commentaires = GenericRelation('Commentaire')
 # attention si vous avez changer les noms "content_type" et "object_id" pour la clef etrangère
 # vous devez spécifier ces noms :
 

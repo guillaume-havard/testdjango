@@ -34,6 +34,8 @@ urlpatterns = patterns('blog.views',
     # Detail view pour voir un objet
     url(r'^article/(?P<pk>\d+)$', LireArticle.as_view(), name='blog_lire'),
 
+    url(r'^test', TemplateView.as_view(template_name='blog/templates-speciaux.html')),
+
 )
 
 
