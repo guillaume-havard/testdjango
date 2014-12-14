@@ -20,8 +20,8 @@ def get_infos(request):
 
 # /!\ aux noms des clefs ils doivent être différent de ceux retourné ar les vue sinon elles seront ecrasées.
 
-# /!\ les fonction de retour de vue ne fot pas tout le temps l'appele au contexte
+# /!\ les fonction de retour de vue ne font pas tout le temps l'appele au contexte
 # (render est un raccourci faisant plusieurs chose dont la récupération du contexte
-# il faudra doc k'ajouter spécifiquement pour certaine fonction
+# il faudra doc l'ajouter spécifiquement pour certaine fonction
 
 #return render_to_response('blog/archives.html', locals(), context_instance=RequestContext(request))

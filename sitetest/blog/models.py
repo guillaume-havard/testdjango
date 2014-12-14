@@ -307,3 +307,42 @@ class Eleve(models.Model):
 # commentaires = GenericRelation(Commentaire,
 #     content_type_field="le_champ_du_content_type",
 #     object_id_field="le champ_de_l_id")
+
+
+### Les Signaux
+# Moyen de communiquer avec l'ensemble du projet
+
+# def ma_fonction_de_suppression(sender, instance, **kwargs):
+# 	# processus de suppression selon les données fournies par instance
+# from django.models.signals import post_delete
+# post_delete.connect(ma_fonction_de_suppression, sender=MonModele)
+
+# Chaque fois qu'un post du modele MonModele est supprimé la fonction "ma_fonction_de_suppression" est appelée.
+
+# Pareil en plus rapide :
+# from django.models.signals import post_delete
+# from django.dispatch import receiver
+# @receiver(post_delete, sender=MonModele)
+# def ma_fonction_de_suppression(sender, instance, **kwargs):
+# 	# processus de suppression selon les données fournies par instance
+
+# Il existe d'autre signaux que post_delete (https://docs.djangoproject.com/en/1.7/ref/signals/) avec des argument différents
+# il es possible de faire ses propres signaux
+
+### Les middlewares
+        # Interviennent juste avant et après l'apple de la vue, permettent de faire des actions sur les données.
+# Il en existe déjà, voir settings.py MIDDLEWARE_CLASSES
+
+# exemple
+# process_request(self, request) : à l'arrivée d'une requête HTTP, avant de la router vers une vue précise. request est un objet HttpRequest (le même que celui passé à une vue).
+# process_view(self, request, view_func, view_args, view_kwargs) : juste avant d'appeler la vue. view_func est une référence vers la fonction prête à être appelée par le framework.
+# view_args et view_kwargs sont les arguments prêts à être appelés avec la vue.
+# process_template_response(self, request, response) : lorsque le code retourne un objet TemplateResponse d'une vue. response est un objet HttpResponse (celui retourné par la vue appelée).
+# process_response(self, request, response) : juste avant que Django renvoie la réponse.
+# process_exception(self, request, exception) : juste avant que Django renvoie une exception si une erreur s'est produite. exception est un objet de type Exception.
+
+# SDZ : les middlewares sont appelés dans l'ordre précisé dans le setting.py, de haut en bas, pour toutes les méthodes appelées avant l'appel de la vue
+# (soit process_request et process_view). Après, les middlewares sont appelés dans le sens inverse, de bas en haut
+# voir : http://sdz-upload.s3.amazonaws.com/prod/upload/middlewares-exec.png
+
+# Voir l'application 'stats'.
