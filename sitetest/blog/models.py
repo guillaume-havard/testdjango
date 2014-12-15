@@ -235,7 +235,7 @@ class Eleve(models.Model):
 #     menu = models.TextField()
 
 # Lieu peut exister seul ainsi que Restaurant
-#Cependant lorsqu'un restaurant est créer la partie correspondant au lieu sera ajouté dans la table Lieu
+# Cependant lorsqu'un restaurant est créé la partie correspondant au lieu sera ajouté dans la table Lieu
 # dans Restaurant il y aur le menu ansi qu'une FK pour l'a bonne entrée dans Lieu.
 
 # il est possible d'acdeser à un classe fille depuis la classe d'origine, il suffit de donner le nom de cette classe

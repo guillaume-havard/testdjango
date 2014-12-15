@@ -36,7 +36,6 @@ urlpatterns = patterns('blog.views',
 
     url(r'^test$', TemplateView.as_view(template_name='blog/templates-speciaux.html')),
     url(r'^test_random$', 'test_random'),
+    url(r'^messages$', 'voir_messages'),
 
 )
-
-

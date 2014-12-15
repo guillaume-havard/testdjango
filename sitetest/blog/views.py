@@ -5,6 +5,7 @@ from django.views.generic import TemplateView, ListView, DetailView
 from datetime import datetime
 from blog.models import Article, Categorie, Contact
 from blog.forms import ContactForm, ArticleForm, NouveauContactForm
+from django.contrib import messages
 
 # Create your views here.
 
@@ -157,3 +158,45 @@ class LireArticle(DetailView):
 
 def test_random(request):
     return render(request, 'blog/test_random.html', {'begin': 1, 'end': 42})
+
+## Messages
+
+# Dans une vue :
+# messages.add_message(request, messages.INFO, 'Bonjour visiteur !')
+
+# Il existe plusieurs types de messages pouvant être appelé par les raccourcis suivant :
+#messages.debug(request, '%s requêtes SQL ont été exécutées.' % compteur)
+#messages.info(request, 'Rebonjour !')
+#messages.success(request, 'Votre article a bien été mis à jour.')
+#messages.warning(request, 'Votre compte expire dans 3 jours.')
+#messages.error(request, 'Cette image n\'existe plus.')
+
+# Exemples messages:
+
+def voir_messages(request):
+    articles = Article.objects.all()
+
+    messages.set_level(request, messages.DEBUG) # je suis obligé de le faire sinon je n'ai pas les debug...
+    messages.add_message(request, messages.INFO, 'Bonjour visiteur !')
+    messages.debug(request, '%s requêtes SQL ont été exécutées.' % articles)
+    messages.info(request, 'Rebonjour !')
+    messages.success(request, 'Votre article a bien été mis à jour.')
+    messages.warning(request, 'Votre compte expire dans 3 jours.')
+    messages.error(request, 'Cette image n\'existe plus.')
+
+    return render(request, 'blog/messages.html')
+
+# Il est possible d'ajouter des niveaux de messages
+# Les méssages existant n'étatnt que des entier
+# messages.add_message(request, 33, 'Bonjour visiteur !')
+
+# Il est aussi possible d'ajouter des tags aux messages
+#messages.add_message(request, CRITICAL, 'Une erreur critique est survenue.', extra_tags="fail")
+
+#Le niveau pour lesquel les messages s'affichent est réglable via  la variable MESSAGE_LEVEL de settings.py
+# ou via une requette "messages.set_level(request, messages.DEBUG)" en vue
+
+
+#en utilisant
+#messages.info(request, 'Message à but informatif.', fail_silently=True)
+# Rien ne se passe si une personne n'a pas activé lesmessage dans son application

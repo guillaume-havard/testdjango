@@ -18,7 +18,7 @@ def get_infos(request):
     date_actuelle = datetime.now()
     return {'date_actuelle': date_actuelle}
 
-# /!\ aux noms des clefs ils doivent être différent de ceux retourné ar les vue sinon elles seront ecrasées.
+# /!\ aux noms des clefs, ils doivent être différent de ceux retournés par les vue sinon elles seront ecrasées.
 
 # /!\ les fonction de retour de vue ne font pas tout le temps l'appele au contexte
 # (render est un raccourci faisant plusieurs chose dont la récupération du contexte
