@@ -17,3 +17,17 @@
 <br/>
 {# <p><a href="{% url "miniURL.views.nouvelle_url" %}">Créer une redirection</a></p> #}
 <p><a href="{% url "url_nouveau" %}">Créer une redirection</a></p>
+
+<div class="pagination">
+   {% if urls.has_previous %}
+       <a href="{% url 'url_liste' urls.previous_page_number %}">Précédente</a> -
+   {% endif %}
+
+   <span class="current">
+       Page {{ urls.number }} sur {{ urls.paginator.num_pages }}
+   </span>
+
+   {% if urls.has_next %}
+       - <a href="{% url 'url_liste' urls.next_page_number %}">Suivante</a>
+   {% endif %}
+</div>

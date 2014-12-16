@@ -200,3 +200,15 @@ def voir_messages(request):
 #en utilisant
 #messages.info(request, 'Message à but informatif.', fail_silently=True)
 # Rien ne se passe si une personne n'a pas activé lesmessage dans son application
+
+### La pagination
+# from django.core.paginator import Paginator
+# p = Paginator(set, 5) # set classe avec une méthode __len__ ou count
+# p.count # nombre d'objet au total
+# p.num_pages # 
+# p.page_range # liste des pages disponibles
+#
+# p.page(x) # access à la page x
+# p.page(x).object_list
+
+# Utilisation dans miniURL/views.py

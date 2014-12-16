@@ -1,15 +1,27 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from miniURL.models import Redirection
 from miniURL.forms import RedirectionForm
+from django.core.paginator import Paginator
 
 # Create your views here.
 from numpy.core.umath import minimum
 
 
-def home(request):
+#def home(request):
+#    urls = Redirection.objects.all().order_by('-number_access')
+#    return render(request, 'miniURL/accueil-url.html', {'urls': urls})
+    
+# Modification pour la pagination
+def home(request, page=1):
     urls = Redirection.objects.all().order_by('-number_access')
-    return render(request, 'miniURL/accueil-url.html', {'urls': urls})
-
+    paginator = Paginator(urls, 5)
+    
+    try:
+        urls = paginator.page(page)
+    except EmptyPage:
+        urls = paginator.page(paginator.num_pages)
+    
+    return render(request, 'miniURL/accueil-url.html', locals())
 
 def nouvelle_url(request):
     sauvegarde = False
