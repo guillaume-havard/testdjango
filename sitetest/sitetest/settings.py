@@ -109,3 +109,82 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     "sitetest.context_processors.get_infos",
 )
+
+
+### Les caches
+# Définis grâce à la variable CACHE
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+#         'LOCATION': '/var/tmp/django_cache',
+#     }
+# }
+#'BACKEND' : méthode utilisé
+#'LOCATION' : Lieu où enregistrer les données.
+
+## Différentes méthodes
+# Par les fichiers
+#'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache'
+
+# Dans la mémoire
+#'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
+# pas très efficace mais simple (par défaut)
+
+# Dans une BdD
+#'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+#'LOCATION': 'nom_table_cache'
+# IL faut créer une table avant
+#python manage.py createcachetable [nom_table_cache]
+# Pratique et rapide si serveur dédié, sinon pas forcement utile
+
+# Avec MemCached (autre logiciel)
+#'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#'LOCATION': '127.0.0.1:11211'
+#Il faut installer le logiciel puis
+#(console) memcached -d -m 512 -l 127.0.0.1 -p 11211
+# Beaucoup plus efficace que ses pairs
+
+# Cache de test (Ne fais rien)
+#'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+
+## Utilisation du cache
+
+# Cache par vue
+# from django.views.decorators.cache import cache_page
+#
+# @cache_page(60 * 15) # Durée du cache en seconde
+# def lire_article(request, id):
+#     article = Article.objects.get(id=id)
+#     # ...
+
+#Possible depuis les urls aussi :
+# from django.views.decorators.cache import cache_page
+#
+# urlpatterns = ('',
+#     (r'^article/(\d{1,4})/$', cache_page(60 * 15)(lire_article)),
+# )
+
+# Cache dans les tempalte
+# {% load cache %}
+# {% cache 500 carrousel %} # Tempen secondes
+#     /* mon carrousel */
+# {% endcache %}
+
+# Il est possible d'avoir plusieurs copie d'un même template
+# {% load cache %}
+# {% cache 500 user.username %}
+#     /* mon carrousel adapté à l'utilisateur actuel */
+# {% endcache %}
+# Par exemple ici l'utilisateur a sa copie
+
+# Cache bas niveau
+#from django.core.cache import cache
+# cache.set('ma_cle', 'Coucou !', 30) # en secondes
+# cache.get('ma_cle') -> 'Coucou !'
+
+# cache.get('ma_cle', 'a expiré') # Deuxième argument, valeur par défaut si cache expiré.
+
+# Pour plusieurs valeurs d'un coups:
+# cache.set_many({'a': 1, 'b': 2, 'c': 3})
+# cache.get_many(['a', 'b', 'c']) -> {'a': 1, 'b': 2, 'c': 3}
+
