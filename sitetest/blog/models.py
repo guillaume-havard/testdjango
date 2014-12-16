@@ -346,3 +346,8 @@ class Eleve(models.Model):
 # voir : http://sdz-upload.s3.amazonaws.com/prod/upload/middlewares-exec.png
 
 # Voir l'application 'stats'.
+
+
+## Internationalisation
+# semblable aux vues sauf qu'il faut ajouter '_lazy' aux noms des fonctions.
+# Comme ça la traduction n'est faite qu'à l'affichage et no pendant l'enregistrement

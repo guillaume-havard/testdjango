@@ -50,6 +50,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'stats.middleware.StatsMiddleware',
+
+    'django.middleware.locale.LocaleMiddleware', #i18n
 )
 
 ROOT_URLCONF = 'sitetest.urls'
@@ -66,20 +68,52 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+#LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-fr'
 
 TIME_ZONE = 'UTC'
 
-USE_I18N = True
+USE_I18N = True # Mettre à false si pas utilisé, gain de place/temps.
 
 USE_L10N = True
 
 USE_TZ = True
 
+# Fausse fonction gettext, permet de l'utiliser dans LANGUAGES, mais n'est pas importer
+# Car fait partit de la configuration qui charge settings (ça ferait une boucle infinie)
+gettext = lambda x: x
+
+LANGUAGES = (
+   ('fr', gettext('French')),
+   ('en', gettext('English')),
+)
+
+## Pour l'internationalisation
+# Il faut ajouter un middleware et contexte processor
+# action du middleware
+# Dans un premier temps, il est possible de configurer les URL pour les préfixer avec la langue voulue. Si ce préfixe apparaît, alors la langue sera forcée.
+# Si aucun préfixe n'apparaît, le middleware vérifie si une langue est précisée dans la session de l'utilisateur.
+# En cas d'échec, le middleware vérifie dans les cookies du visiteur si un cookie nommé _language (défini par Django) existe.
+# En cas d'échec, il vérifie la requête HTTP et vérifie si l'en-tête Accept-Language est envoyé. Cet en-tête, envoyé par le navigateur du visiteur, spécifie les langues de prédilection, par ordre de priorité. Django essaie chaque langue une par une, selon celles disponibles dans notre projet.
+# Enfin, si aucune de ces méthodes ne fonctionne, alors Django se rabat sur le paramètre LANGUAGE_CODE.
+
+# Il y a deux modes de traduction différent d'nu coté les vues et models set l'autre les tempaltes.
+
+# Une fois l'endroit des traduction faite il faut les écrire.
+# Elles seront stockés dans des fichiers .po avec un langue par dossier
+# Créer un dossier "locale"
+# dans les app ou pour tout le projet
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
+
+# Lancer la création des fichiers po avec
+#python3 manage.py makemessages -l en
+# MAIS ne fonctionne pas chez moi ...
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
@@ -89,7 +123,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
-
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
@@ -108,6 +141,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
 
     "sitetest.context_processors.get_infos",
+
+    "django.core.context_processors.i18n", #i18n
 )
 
 

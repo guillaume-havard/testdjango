@@ -6,7 +6,8 @@ from datetime import datetime
 from blog.models import Article, Categorie, Contact
 from blog.forms import ContactForm, ArticleForm, NouveauContactForm
 from django.contrib import messages
-
+from django.utils.translation import ugettext as _
+from django.utils.translation import ungettext
 # Create your views here.
 
 """
@@ -212,3 +213,26 @@ def voir_messages(request):
 # p.page(x).object_list
 
 # Utilisation dans miniURL/views.py
+
+
+## Internationalisation
+# import ugettext as _
+def test_i18n(request):
+    nb_chats = 1
+    couleur = "blanc"
+    chaine = _("Bonjour les nouveaux !")
+    ip = _("Votre IP est %s") % request.META['REMOTE_ADDR']
+    # ungettext pour gerer les pluriels
+    # une chaine singulier, une chaine pluriel et la variable détermiannt le choix de la pluralité.
+    # Attention durant l'i18n, l'ordre des mots peut changer, mieux vaut les nomer.
+    infos = ungettext(
+        "… et selon mes informations, vous avez %(nb)s chat %(col)s !",
+        "… et selon mes informations, vous avez %(nb)s chats %(col)ss !",
+        nb_chats) % {'nb': nb_chats, 'col': couleur}
+
+    return render(request, 'blog/test_i18n.html', locals())
+
+# Il est possible de laisser des commentaire pour les traducteur en ajoutant "Translators" au début du commentaire
+# Translators: This message informs the user about how many books he can borrow
+#quota = _("3 livres")
+# Il est possible d'avoir un contexte pour les homographies : pgettext

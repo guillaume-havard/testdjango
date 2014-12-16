@@ -1,0 +1,63 @@
+{% load i18n %}
+
+
+
+<h2>Exemple vue</h2>
+<p>
+  Bonjour les nouveaux !<br />
+  {{ chaine }}
+</p>
+<p>
+  {{ ip }} {{ infos }}
+</p>
+
+<h2>Exemple template</h2>
+<p>
+    <h3>Les tags</h3>
+    <p>{% trans "Contactez-nous !" %}</p>
+    <p>{% trans ma_variable %}</p>
+
+    {# je ne comprends pas trop ce que ça fait. #}
+    {% trans "Contactez-nous" as titre %}
+    <title>{{ titre }} - {% trans "Blog sur les crêpes bretonnes" %}</title>
+    <meta name="description" content="{{ titre }}, {% trans "sur notre magnifique blog de crêpes" %}"/>
+
+    <h4>Les contextes</h4>
+    {% trans "Est" context "Verbe être" %}
+    {% trans "Est" context "Cardinalité" %}
+
+    <h3>Les blocs</h3>
+
+    <p>{% blocktrans %}Vous avez {{ age }} ans.{% endblocktrans %}</p>
+    <p>
+        Pour utiliser des expression il faut les "tager"<br/>
+        {% blocktrans with nom=user.nom prenom=user.prenom nb_articles=panier|length %}
+        Vous êtes {{ prenom }} {{ nom }}. Vous avez {{ nb_articles }} articles dans votre panier.
+        {% endblocktrans %}
+    </p>
+
+    <p>
+        {# "count nb=commande.articles|length" pour le pluriel, 'nb' tag utiliser dans le bloc #}
+        {% blocktrans with total=commande.total count nb=commande.articles|length %}
+        Vous avez 1 article dans votre panier. Prix total : {{ total }}
+        {% plural %}
+        Vous avez {{ nb }} articles dans votre panier. Prix total : {{ total }}
+        {% endblocktrans %}
+    </p>
+
+    <h4>Les contextes</h4>
+    <p>
+        L'utilisation des contexte est aussi possible<br/>
+{#         {% blocktrans with pseudo=user.username context "lien de parenté" %}  #}
+{#             Les fils de {{ pseudo }}  #}
+{#         {% endblocktrans %}  #}
+    </p>
+    <h4>Aide pour les traducteurs</h4>
+    <p>
+        {# Translators: Phrase courte, dans un bouton pour la recherche #}
+        {% trans "Go !" %}
+        <br/>
+        {% comment %}Translators: Phrase affichée dans le header du site{% endcomment %}
+        {% blocktrans %}Notre phrase d'accroche géniale !{% endblocktrans %}
+    </p>
+</p>
