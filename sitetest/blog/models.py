@@ -87,6 +87,12 @@ class Article(models.Model):
     categorie = models.ForeignKey('Categorie')
     nb_vues = models.IntegerField(default=0)
 
+    def est_recent(self):
+        """ Retourne True si l'article a été publié dans
+            les 30 derniers jours """
+        from datetime import datetime
+        return (datetime.now() - self.date).days < 30  and self.date < datetime.now()
+
     def __str__(self):
         """
         Cette méthode que nous définirons dans tous les modèles
