@@ -236,3 +236,6 @@ def test_i18n(request):
 # Translators: This message informs the user about how many books he can borrow
 #quota = _("3 livres")
 # Il est possible d'avoir un contexte pour les homographies : pgettext
+
+def choix_i18n(request):
+    return render(request, 'blog/choix_i18n.html', locals())

@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^blog/', include('blog.urls')),
     url(r'^miniURL/', include('miniURL.urls')),
+    url(r'^i18n/', include('django.conf.urls.i18n'))
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

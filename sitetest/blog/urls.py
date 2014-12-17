@@ -38,5 +38,6 @@ urlpatterns = patterns('blog.views',
     url(r'^test_random$', 'test_random'),
     url(r'^messages$', 'voir_messages'),
     url(r'^test_i18n$', 'test_i18n'),
+    url(r'^choix_i18n$', 'choix_i18n'),
 
 )

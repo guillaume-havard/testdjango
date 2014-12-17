@@ -115,6 +115,18 @@ LOCALE_PATHS = (
 #python3 manage.py makemessages -l en
 # MAIS ne fonctionne pas chez moi ...
 
+# Il faut ensuite effectuer les traductions -> le faire à la main
+# ENsuite il faut compiler les .po en .mo
+#python manage.py compilemessages
+
+## Choix de la langue
+# Il est possible de la faire avec "django.utils.translation.activate"
+# ou en ajoutant URL dans les urls principales et avoir une page (tempalte) de choix de langue
+
+# Je ne peux pas tester car une étape ne fonctionne pas.
+
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
